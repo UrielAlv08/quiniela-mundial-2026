@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiniela Mundial 2026</title>
+    <!-- Fuente moderna -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- Librería para tomar capturas de pantalla -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a0b2e 0%, #00529b 100%);
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        /* Contenedor principal que se convertirá en imagen */
+        #quiniela-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        /* Encabezado */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-weight: 800;
+            font-size: 2.5rem;
+            margin: 0;
+            background: linear-gradient(to right, #00f2fe, #4facfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            color: #ddd;
+            margin-top: 5px;
+        }
+
+        /* Sección Campeón */
+        .campeon-section {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .campeon-section select {
+            width: 100%;
+            max-width: 350px;
+            padding: 12px 15px;
+            font-size: 1.1rem;
+            border-radius: 10px;
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+        }
+
+        /* Grid de Grupos */
+        .groups-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .group-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 15px;
+            transition: transform 0.2s;
+        }
+
+        .group-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .group-title {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Opciones de equipos */
+        .team-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .team-option:hover {
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .team-option input[type="checkbox"] {
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
+            accent-color: #00f2fe;
+            cursor: pointer;
+        }
+
+        .flag {
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+
+        .team-name {
+            font-weight: 400;
+            font-size: 1rem;
+        }
+
+        /* Nombre del participante */
+        .user-info {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .user-info input {
+            padding: 10px 15px;
+            font-size: 1rem;
+            border-radius: 8px;
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            width: 100%;
+            max-width: 350px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        /* Botón Flotante/Fijo para descargar */
+        .actions {
+            text-align: center;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+
+        .btn-descargar {
+            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+            color: #1a0b2e;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: 800;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-descargar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 242, 254, 0.6);
+        }
+    </style>
+</head>
+<body>
+
+<!-- Agregamos un div contenedor general que es el que se le tomará la captura -->
+<div id="quiniela-container">
+    <div class="header">
+        <h1>🏆 Quiniela Mundial 26</h1>
+        <p>Selecciona a los 2 que avanzan por grupo y tu campeón</p>
+    </div>
+
+    <div class="user-info">
+        <input type="text" id="nombreParticipante" placeholder="Ingresa tu nombre / apodo" autocomplete="off">
+    </div>
+
+    <div class="campeon-section">
+        <h2 style="margin-top: 0; font-size: 1.2rem;">¿Quién levantará la copa?</h2>
+        <select id="campeon" name="campeon">
+            <option value="" disabled selected>Elige al Campeón del Mundo...</option>
+            
+            <!-- Anfitriones (CONCACAF) -->
+            <option value="Canada">🇨🇦 Canadá</option>
+            <option value="Estados_Unidos">🇺🇸 Estados Unidos</option>
+            <option value="Mexico">🇲🇽 México</option>
+
+            <!-- CONMEBOL (Sudamérica) -->
+            <option value="Argentina">🇦🇷 Argentina</option>
+            <option value="Brasil">🇧🇷 Brasil</option>
+            <option value="Chile">🇨🇱 Chile</option>
+            <option value="Colombia">🇨🇴 Colombia</option>
+            <option value="Ecuador">🇪🇨 Ecuador</option>
+            <option value="Peru">🇵🇪 Perú</option>
+            <option value="Uruguay">🇺🇾 Uruguay</option>
+            <option value="Venezuela">🇻🇪 Venezuela</option>
+
+            <!-- UEFA (Europa) -->
+            <option value="Alemania">🇩🇪 Alemania</option>
+            <option value="Austria">🇦🇹 Austria</option>
+            <option value="Belgica">🇧🇪 Bélgica</option>
+            <option value="Croacia">🇭🇷 Croacia</option>
+            <option value="Dinamarca">🇩🇰 Dinamarca</option>
+            <option value="Espana">🇪🇸 España</option>
+            <option value="Francia">🇫🇷 Francia</option>
+            <option value="Inglaterra">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra</option>
+            <option value="Italia">🇮🇹 Italia</option>
+            <option value="Paises_Bajos">🇳🇱 Países Bajos</option>
+            <option value="Polonia">🇵🇱 Polonia</option>
+            <option value="Portugal">🇵🇹 Portugal</option>
+            <option value="Serbia">🇷🇸 Serbia</option>
+            <option value="Suecia">🇸🇪 Suecia</option>
+            <option value="Suiza">🇨🇭 Suiza</option>
+            <option value="Ucrania">🇺🇦 Ucrania</option>
+
+            <!-- CAF (África) -->
+            <option value="Argelia">🇩🇿 Argelia</option>
+            <option value="Camerun">🇨🇲 Camerún</option>
+            <option value="Costa_de_Marfil">🇨🇮 Costa de Marfil</option>
+            <option value="Egipto">🇪🇬 Egipto</option>
+            <option value="Ghana">🇬🇭 Ghana</option>
+            <option value="Marruecos">🇲🇦 Marruecos</option>
+            <option value="Nigeria">🇳🇬 Nigeria</option>
+            <option value="Senegal">🇸🇳 Senegal</option>
+            <option value="Tunez">🇹🇳 Túnez</option>
+
+            <!-- AFC (Asia) -->
+            <option value="Arabia_Saudita">🇸🇦 Arabia Saudita</option>
+            <option value="Australia">🇦🇺 Australia</option>
+            <option value="Corea_del_Sur">🇰🇷 Corea del Sur</option>
+            <option value="Emiratos_Arabes">🇦🇪 Emiratos Árabes Unidos</option>
+            <option value="Iran">🇮🇷 Irán</option>
+            <option value="Japon">🇯🇵 Japón</option>
+            <option value="Qatar">🇶🇦 Qatar</option>
+            <option value="Uzbekistan">🇺🇿 Uzbekistán</option>
+
+            <!-- CONCACAF (Norte, Centroamérica y Caribe) -->
+            <option value="Costa_Rica">🇨🇷 Costa Rica</option>
+            <option value="Honduras">🇭🇳 Honduras</option>
+            <option value="Jamaica">🇯🇲 Jamaica</option>
+            <option value="Panama">🇵🇦 Panamá</option>
+
+            <!-- OFC (Oceanía) -->
+            <option value="Nueva_Zelanda">🇳🇿 Nueva Zelanda</option>
+
+            <!-- Opción por defecto / Sorpresa -->
+        </select>
+    </div>
+
+    <div class="groups-grid">
+    <div class="group-card">
+        <h3 class="group-title">Grupo A</h3>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoA" value="Mexico"> 
+            <span class="flag">🇲🇽</span> <span class="team-name">México</span>
+        </label>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoA" value="Sudafrica"> 
+            <span class="flag">🇿🇦</span> <span class="team-name">Sudáfrica</span>
+        </label>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoA" value="Corea"> 
+            <span class="flag">🇰🇷</span> <span class="team-name">Corea</span>
+        </label>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoA" value="Chequia"> 
+            <span class="flag">🇨🇿</span> <span class="team-name">Chequia</span>
+        </label>
+    </div>
+
+    <div class="group-card">
+        <h3 class="group-title">Grupo B</h3>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoB" value="Canada"> 
+            <span class="flag">🇨🇦</span> <span class="team-name">Canadá</span>
+        </label>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoB" value="Bosnia"> 
+            <span class="flag">🇧🇦</span> <span class="team-name">Bosnia</span>
+        </label>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoB" value="Qatar"> 
+            <span class="flag">🇶🇦</span> <span class="team-name">Qatar</span>
+        </label>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoB" value="Suiza"> 
+            <span class="flag">🇨🇭</span> <span class="team-name">Suiza</span>
+        </label>
+    </div>
+
+    <div class="group-card">
+        <h3 class="group-title">Grupo C</h3>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoC" value="Brasil"> 
+            <span class="flag">🇧🇷</span> <span class="team-name">Brasil</span>
+        </label>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoC" value="Marruecos"> 
+            <span class="flag">🇲🇦</span> <span class="team-name">Marruecos</span>
+        </label>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoC" value="Haiti"> 
+            <span class="flag">🇭🇹</span> <span class="team-name">Haití</span>
+        </label>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoC" value="Escocia"> 
+            <span class="flag">🏴󠁧󠁢󠁳󠁣󠁴󠁿</span> <span class="team-name">Escocia</span>
+        </label>
+    </div>
+
+    <div class="group-card">
+        <h3 class="group-title">Grupo D</h3>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoD" value="Estados_Unidos"> 
+            <span class="flag">🇺🇸</span> <span class="team-name">Estados Unidos</span>
+        </label>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoD" value="Paraguay"> 
+            <span class="flag">🇵🇾</span> <span class="team-name">Paraguay</span>
+        </label>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoD" value="Australia"> 
+            <span class="flag">🇦🇺</span> <span class="team-name">Australia</span>
+        </label>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoD" value="Turquia"> 
+            <span class="flag">🇹🇷</span> <span class="team-name">Turquía</span>
+        </label>
+    </div>
+
+    <div class="group-card">
+        <h3 class="group-title">Grupo E</h3>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoE" value="Alemania"> 
+            <span class="flag">🇩🇪</span> <span class="team-name">Alemania</span>
+        </label>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoE" value="Curazao"> 
+            <span class="flag">🇨🇼</span> <span class="team-name">Curazao</span>
+        </label>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoE" value="Costa_de_Marfil"> 
+            <span class="flag">🇨🇮</span> <span class="team-name">Costa de Marfil</span>
+        </label>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoE" value="Ecuador"> 
+            <span class="flag">🇪🇨</span> <span class="team-name">Ecuador</span>
+        </label>
+    </div>
+
+    <div class="group-card">
+        <h3 class="group-title">Grupo F</h3>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoF" value="Paises_Bajos"> 
+            <span class="flag">🇳🇱</span> <span class="team-name">Países Bajos</span>
+        </label>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoF" value="Japon"> 
+            <span class="flag">🇯🇵</span> <span class="team-name">Japón</span>
+        </label>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoF" value="Suecia"> 
+            <span class="flag">🇸🇪</span> <span class="team-name">Suecia</span>
+        </label>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoF" value="Tunez"> 
+            <span class="flag">🇹🇳</span> <span class="team-name">Túnez</span>
+        </label>
+    </div>
+
+    <div class="group-card">
+        <h3 class="group-title">Grupo G</h3>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoG" value="Belgica"> 
+            <span class="flag">🇧🇪</span> <span class="team-name">Bélgica</span>
+        </label>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoG" value="Egipto"> 
+            <span class="flag">🇪🇬</span> <span class="team-name">Egipto</span>
+        </label>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoG" value="Iran"> 
+            <span class="flag">🇮🇷</span> <span class="team-name">Irán</span>
+        </label>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoG" value="Nueva_Zelanda"> 
+            <span class="flag">🇳🇿</span> <span class="team-name">Nueva Zelanda</span>
+        </label>
+    </div>
+
+    <div class="group-card">
+        <h3 class="group-title">Grupo H</h3>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoH" value="Espana"> 
+            <span class="flag">🇪🇸</span> <span class="team-name">España</span>
+        </label>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoH" value="Cabo_Verde"> 
+            <span class="flag">🇨🇻</span> <span class="team-name">Cabo Verde</span>
+        </label>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoH" value="Arabia_Saudita"> 
+            <span class="flag">🇸🇦</span> <span class="team-name">Arabia S.</span>
+        </label>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoH" value="Uruguay"> 
+            <span class="flag">🇺🇾</span> <span class="team-name">Uruguay</span>
+        </label>
+    </div>
+
+    <div class="group-card">
+        <h3 class="group-title">Grupo I</h3>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoI" value="Francia"> 
+            <span class="flag">🇫🇷</span> <span class="team-name">Francia</span>
+        </label>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoI" value="Senegal"> 
+            <span class="flag">🇸🇳</span> <span class="team-name">Senegal</span>
+        </label>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoI" value="Irak"> 
+            <span class="flag">🇮🇶</span> <span class="team-name">Irak</span>
+        </label>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoI" value="Noruega"> 
+            <span class="flag">🇳🇴</span> <span class="team-name">Noruega</span>
+        </label>
+    </div>
+
+    <div class="group-card">
+        <h3 class="group-title">Grupo J</h3>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoJ" value="Argentina"> 
+            <span class="flag">🇦🇷</span> <span class="team-name">Argentina</span>
+        </label>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoJ" value="Argelia"> 
+            <span class="flag">🇩🇿</span> <span class="team-name">Argelia</span>
+        </label>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoJ" value="Austria"> 
+            <span class="flag">🇦🇹</span> <span class="team-name">Austria</span>
+        </label>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoJ" value="Jordania"> 
+            <span class="flag">🇯🇴</span> <span class="team-name">Jordania</span>
+        </label>
+    </div>
+
+    <div class="group-card">
+        <h3 class="group-title">Grupo K</h3>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoK" value="Portugal"> 
+            <span class="flag">🇵🇹</span> <span class="team-name">Portugal</span>
+        </label>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoK" value="RD_Congo"> 
+            <span class="flag">🇨🇩</span> <span class="team-name">RD Congo</span>
+        </label>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoK" value="Uzbekistan"> 
+            <span class="flag">🇺🇿</span> <span class="team-name">Uzbekistán</span>
+        </label>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoK" value="Colombia"> 
+            <span class="flag">🇨🇴</span> <span class="team-name">Colombia</span>
+        </label>
+    </div>
+
+    <div class="group-card">
+        <h3 class="group-title">Grupo L</h3>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoL" value="Inglaterra"> 
+            <span class="flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span> <span class="team-name">Inglaterra</span>
+        </label>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoL" value="Croacia"> 
+            <span class="flag">🇭🇷</span> <span class="team-name">Croacia</span>
+        </label>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoL" value="Ghana"> 
+            <span class="flag">🇬🇭</span> <span class="team-name">Ghana</span>
+        </label>
+        <label class="team-option">
+            <input type="checkbox" class="chk-grupoL" value="Panama"> 
+            <span class="flag">🇵🇦</span> <span class="team-name">Panamá</span>
+        </label>
+    </div>
+</div>
+</div>
+
+<div class="actions">
+    <button type="button" class="btn-descargar" onclick="descargarCaptura()">Generar Captura</button>
+</div>
+
+<script>
+    // 1. Limitar a máximo 2 checkboxes seleccionados por grupo
+    const grupos = ['grupoA', 'grupoB', 'grupoC', 'grupoD', 'grupoE', 'grupoF', 'grupoG', 'grupoH', 'grupoI', 'grupoJ', 'grupoK', 'grupoL']; // Agrega las letras si metes más grupos
+
+    grupos.forEach(grupo => {
+        const checkboxes = document.querySelectorAll(`.chk-${grupo}`);
+        checkboxes.forEach(chk => {
+            chk.addEventListener('change', function() {
+                const checkedCount = document.querySelectorAll(`.chk-${grupo}:checked`).length;
+                if (checkedCount > 2) {
+                    this.checked = false;
+                    alert('Solo pasan 2 por grupo, we.');
+                }
+            });
+        });
+    });
+
+    // 2. Función para tomar screenshot del div principal y descargar
+    function descargarCaptura() {
+        const nombre = document.getElementById('nombreParticipante').value;
+        const campeon = document.getElementById('campeon').value;
+        
+        if(!nombre) {
+            alert("¡Pon tu nombre primero para saber de quién es la quiniela!");
+            return;
+        }
+        if(!campeon) {
+            alert("¡No olvides seleccionar al campeón del mundo!");
+            return;
+        }
+
+        const contenedor = document.getElementById('quiniela-container');
+        
+        // Usamos html2canvas
+        html2canvas(contenedor, {
+            backgroundColor: "#1a0b2e", // Fondo para que no salga transparente
+            scale: 2 // Para que tenga buena calidad la imagen
+        }).then(canvas => {
+            // Convertir el canvas a un Data URL
+            const imgData = canvas.toDataURL("image/png");
+            
+            // Crear un enlace temporal para forzar la descarga
+            const enlace = document.createElement('a');
+            enlace.href = imgData;
+            // El archivo llevará el nombre del participante
+            enlace.download = `Quiniela_${nombre.replace(/\s+/g, '_')}.png`; 
+            
+            document.body.appendChild(enlace);
+            enlace.click();
+            document.body.removeChild(enlace);
+        });
+    }
+</script>
+
+</body>
+</html>
