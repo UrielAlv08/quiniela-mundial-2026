@@ -3,575 +3,391 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiniela Mundial 2026</title>
-    <!-- Fuente moderna -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
-    <!-- Librería para tomar capturas de pantalla -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    
+    <title>Quiniela Fase Final 2026</title>
     <style>
-        * {
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-
+        /* ================= CSS ================= */
         body {
-            background: linear-gradient(135deg, #1a0b2e 0%, #00529b 100%);
-            color: #fff;
+            background-color: #050d1a;
+            color: #00ffff;
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 20px;
-            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        /* Contenedor principal que se convertirá en imagen */
-        #quiniela-container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-        }
-
-        /* Encabezado */
-        .header {
+        h1 {
             text-align: center;
-            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
         }
 
-        .header h1 {
-            font-weight: 800;
-            font-size: 2.5rem;
-            margin: 0;
-            background: linear-gradient(to right, #00f2fe, #4facfe);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .header p {
-            color: #ddd;
-            margin-top: 5px;
-        }
-
-        /* Sección Campeón */
-        .campeon-section {
-            background: rgba(0, 0, 0, 0.2);
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            margin-bottom: 30px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .campeon-section select {
+        /* Pantallas */
+        #login-screen, #app-screen {
             width: 100%;
-            max-width: 350px;
-            padding: 12px 15px;
-            font-size: 1.1rem;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* --- Estilos del Login y Registro --- */
+        .login-box {
+            background-color: #020c26;
+            border: 1px solid #d4af37;
             border-radius: 10px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 300px;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+            text-align: center;
+        }
+
+        .login-input {
+            padding: 10px;
+            background-color: #050d1a;
+            border: 1px solid #00ffff;
+            color: #fff;
+            border-radius: 5px;
+            outline: none;
+            font-size: 16px;
+        }
+
+        .btn-principal {
+            background-color: #00ffff;
+            color: #050d1a;
             border: none;
-            background: rgba(255, 255, 255, 0.9);
-            color: #333;
-            font-weight: 600;
+            padding: 12px;
+            font-weight: bold;
+            border-radius: 5px;
             cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.2s;
+        }
+
+        .btn-principal:hover {
+            background-color: #d4af37;
+            box-shadow: 0 0 10px #d4af37;
+        }
+        
+        .btn-registro {
+            background-color: #28a745;
+            color: white;
+        }
+        
+        .btn-registro:hover {
+            background-color: #218838;
+            box-shadow: 0 0 10px #28a745;
+        }
+
+        /* --- Estilos de los Partidos --- */
+        .bracket-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .match-card {
+            background-color: #020c26;
+            border: 1px solid #00ffff;
+            border-radius: 10px;
+            padding: 15px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 280px;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.1);
+        }
+
+        .match-title {
+            font-size: 14px;
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #d4af37;
+            text-transform: uppercase;
+        }
+
+        .marcador-inputs {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .gol-input {
+            width: 40px;
+            height: 40px;
+            background-color: #050d1a;
+            border: 1px solid #00ffff;
+            color: #fff;
+            font-size: 20px;
+            text-align: center;
+            border-radius: 5px;
             outline: none;
         }
 
-        /* Grid de Grupos */
-        .groups-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+        .gol-input:focus {
+            box-shadow: 0 0 8px #00ffff;
         }
 
-        .group-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 15px;
-            transition: transform 0.2s;
-        }
-
-        .group-card:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .group-title {
-            text-align: center;
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-top: 0;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-        }
-
-        /* Opciones de equipos */
-        .team-option {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-            padding: 8px 12px;
-            background: rgba(0, 0, 0, 0.3);
+        /* Contenedor de Penales (Magia invisible) */
+        .penales-container {
+            display: none; 
+            margin-top: 15px;
+            padding: 10px;
+            border: 1px dashed #00ffff;
             border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .team-option:hover {
-            background: rgba(0, 0, 0, 0.5);
-        }
-
-        .team-option input[type="checkbox"] {
-            margin-right: 12px;
-            width: 18px;
-            height: 18px;
-            accent-color: #00f2fe;
-            cursor: pointer;
-        }
-
-        .flag {
-            font-size: 1.5rem;
-            margin-right: 10px;
-        }
-
-        .team-name {
-            font-weight: 400;
-            font-size: 1rem;
-        }
-
-        /* Nombre del participante */
-        .user-info {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .user-info input {
-            padding: 10px 15px;
-            font-size: 1rem;
-            border-radius: 8px;
-            border: none;
-            background: rgba(255, 255, 255, 0.9);
             width: 100%;
-            max-width: 350px;
             text-align: center;
-            font-weight: 600;
+            animation: aparecer 0.3s ease-in-out;
         }
 
-        /* Botón Flotante/Fijo para descargar */
-        .actions {
-            text-align: center;
-            margin-top: 40px;
-            margin-bottom: 20px;
+        .penales-container.visible {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
-        .btn-descargar {
-            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
-            color: #1a0b2e;
-            border: none;
-            padding: 15px 40px;
-            font-size: 1.2rem;
-            font-weight: 800;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.4);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .btn-descargar:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 242, 254, 0.6);
+        @keyframes aparecer {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
 
-<!-- Agregamos un div contenedor general que es el que se le tomará la captura -->
-<div id="quiniela-container">
-    <div class="header">
-        <h1>🏆 Quiniela Mundial 26</h1>
-        <p>Selecciona a los 2 que avanzan por grupo y tu campeón</p>
-    </div>
+    <h1>🏆 Quiniela 2026</h1>
 
-    <div class="user-info">
-        <input type="text" id="nombreParticipante" placeholder="Ingresa tu nombre / apodo" autocomplete="off">
-    </div>
-
-    <div class="campeon-section">
-        <h2 style="margin-top: 0; font-size: 1.2rem;">¿Quién levantará la copa?</h2>
-        <select id="campeon" name="campeon">
-            <option value="" disabled selected>Elige al Campeón del Mundo...</option>
+    <div id="login-screen">
+        <div class="login-box">
+            <h3 style="margin: 0; color: #d4af37;">Acceso a la Quiniela</h3>
+            <input type="text" id="user-name" class="login-input" placeholder="Tu Usuario (Ej. ElBicho7)">
+            <input type="password" id="user-pin" class="login-input" placeholder="Tu PIN (4 dígitos)" maxlength="4">
             
-            <!-- Anfitriones (CONCACAF) -->
-            <option value="Canada">🇨🇦 Canadá</option>
-            <option value="Estados_Unidos">🇺🇸 Estados Unidos</option>
-            <option value="Mexico">🇲🇽 México</option>
-
-            <!-- CONMEBOL (Sudamérica) -->
-            <option value="Argentina">🇦🇷 Argentina</option>
-            <option value="Brasil">🇧🇷 Brasil</option>
-            <option value="Chile">🇨🇱 Chile</option>
-            <option value="Colombia">🇨🇴 Colombia</option>
-            <option value="Ecuador">🇪🇨 Ecuador</option>
-            <option value="Peru">🇵🇪 Perú</option>
-            <option value="Uruguay">🇺🇾 Uruguay</option>
-            <option value="Venezuela">🇻🇪 Venezuela</option>
-
-            <!-- UEFA (Europa) -->
-            <option value="Alemania">🇩🇪 Alemania</option>
-            <option value="Austria">🇦🇹 Austria</option>
-            <option value="Belgica">🇧🇪 Bélgica</option>
-            <option value="Croacia">🇭🇷 Croacia</option>
-            <option value="Dinamarca">🇩🇰 Dinamarca</option>
-            <option value="Espana">🇪🇸 España</option>
-            <option value="Francia">🇫🇷 Francia</option>
-            <option value="Inglaterra">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra</option>
-            <option value="Italia">🇮🇹 Italia</option>
-            <option value="Paises_Bajos">🇳🇱 Países Bajos</option>
-            <option value="Polonia">🇵🇱 Polonia</option>
-            <option value="Portugal">🇵🇹 Portugal</option>
-            <option value="Serbia">🇷🇸 Serbia</option>
-            <option value="Suecia">🇸🇪 Suecia</option>
-            <option value="Suiza">🇨🇭 Suiza</option>
-            <option value="Ucrania">🇺🇦 Ucrania</option>
-
-            <!-- CAF (África) -->
-            <option value="Argelia">🇩🇿 Argelia</option>
-            <option value="Camerun">🇨🇲 Camerún</option>
-            <option value="Costa_de_Marfil">🇨🇮 Costa de Marfil</option>
-            <option value="Egipto">🇪🇬 Egipto</option>
-            <option value="Ghana">🇬🇭 Ghana</option>
-            <option value="Marruecos">🇲🇦 Marruecos</option>
-            <option value="Nigeria">🇳🇬 Nigeria</option>
-            <option value="Senegal">🇸🇳 Senegal</option>
-            <option value="Tunez">🇹🇳 Túnez</option>
-
-            <!-- AFC (Asia) -->
-            <option value="Arabia_Saudita">🇸🇦 Arabia Saudita</option>
-            <option value="Australia">🇦🇺 Australia</option>
-            <option value="Corea_del_Sur">🇰🇷 Corea del Sur</option>
-            <option value="Emiratos_Arabes">🇦🇪 Emiratos Árabes Unidos</option>
-            <option value="Iran">🇮🇷 Irán</option>
-            <option value="Japon">🇯🇵 Japón</option>
-            <option value="Qatar">🇶🇦 Qatar</option>
-            <option value="Uzbekistan">🇺🇿 Uzbekistán</option>
-
-            <!-- CONCACAF (Norte, Centroamérica y Caribe) -->
-            <option value="Costa_Rica">🇨🇷 Costa Rica</option>
-            <option value="Honduras">🇭🇳 Honduras</option>
-            <option value="Jamaica">🇯🇲 Jamaica</option>
-            <option value="Panama">🇵🇦 Panamá</option>
-
-            <!-- OFC (Oceanía) -->
-            <option value="Nueva_Zelanda">🇳🇿 Nueva Zelanda</option>
-
-            <!-- Opción por defecto / Sorpresa -->
-        </select>
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <button id="btn-login" class="btn-principal" style="flex: 1;">Entrar</button>
+                <button id="btn-register" class="btn-principal btn-registro" style="flex: 1;">Registrar</button>
+            </div>
+        </div>
     </div>
 
-    <div class="groups-grid">
-    <div class="group-card">
-        <h3 class="group-title">Grupo A</h3>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoA" value="Mexico"> 
-            <span class="flag">🇲🇽</span> <span class="team-name">México</span>
-        </label>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoA" value="Sudafrica"> 
-            <span class="flag">🇿🇦</span> <span class="team-name">Sudáfrica</span>
-        </label>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoA" value="Corea"> 
-            <span class="flag">🇰🇷</span> <span class="team-name">Corea</span>
-        </label>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoA" value="Chequia"> 
-            <span class="flag">🇨🇿</span> <span class="team-name">Chequia</span>
-        </label>
+    <div id="app-screen" style="display: none;">
+        <h2 id="bienvenida-msg" style="color: #fff; margin-bottom: 20px;"></h2>
+        
+        <div id="contenedor-partidos" class="bracket-container">
+            <h3 style="text-align: center;">Cargando partidos disponibles... ⏳</h3>
+        </div>
     </div>
 
-    <div class="group-card">
-        <h3 class="group-title">Grupo B</h3>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoB" value="Canada"> 
-            <span class="flag">🇨🇦</span> <span class="team-name">Canadá</span>
-        </label>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoB" value="Bosnia"> 
-            <span class="flag">🇧🇦</span> <span class="team-name">Bosnia</span>
-        </label>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoB" value="Qatar"> 
-            <span class="flag">🇶🇦</span> <span class="team-name">Qatar</span>
-        </label>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoB" value="Suiza"> 
-            <span class="flag">🇨🇭</span> <span class="team-name">Suiza</span>
-        </label>
-    </div>
+    <script type="module">
+        // Importamos Firebase desde los CDN para el navegador
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, query, where, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    <div class="group-card">
-        <h3 class="group-title">Grupo C</h3>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoC" value="Brasil"> 
-            <span class="flag">🇧🇷</span> <span class="team-name">Brasil</span>
-        </label>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoC" value="Marruecos"> 
-            <span class="flag">🇲🇦</span> <span class="team-name">Marruecos</span>
-        </label>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoC" value="Haiti"> 
-            <span class="flag">🇭🇹</span> <span class="team-name">Haití</span>
-        </label>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoC" value="Escocia"> 
-            <span class="flag">🏴󠁧󠁢󠁳󠁣󠁴󠁿</span> <span class="team-name">Escocia</span>
-        </label>
-    </div>
+        // Tus credenciales reales de Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyBwlXIhv5y-tEzvJ3kECF_AAPEyctZk4ak",
+            authDomain: "quiniela-2026-f2660.firebaseapp.com",
+            projectId: "quiniela-2026-f2660",
+            storageBucket: "quiniela-2026-f2660.firebasestorage.app",
+            messagingSenderId: "231292737636",
+            appId: "1:231292737636:web:073d04102f7a09a6c42771"
+        };
 
-    <div class="group-card">
-        <h3 class="group-title">Grupo D</h3>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoD" value="Estados_Unidos"> 
-            <span class="flag">🇺🇸</span> <span class="team-name">Estados Unidos</span>
-        </label>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoD" value="Paraguay"> 
-            <span class="flag">🇵🇾</span> <span class="team-name">Paraguay</span>
-        </label>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoD" value="Australia"> 
-            <span class="flag">🇦🇺</span> <span class="team-name">Australia</span>
-        </label>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoD" value="Turquia"> 
-            <span class="flag">🇹🇷</span> <span class="team-name">Turquía</span>
-        </label>
-    </div>
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
-    <div class="group-card">
-        <h3 class="group-title">Grupo E</h3>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoE" value="Alemania"> 
-            <span class="flag">🇩🇪</span> <span class="team-name">Alemania</span>
-        </label>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoE" value="Curazao"> 
-            <span class="flag">🇨🇼</span> <span class="team-name">Curazao</span>
-        </label>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoE" value="Costa_de_Marfil"> 
-            <span class="flag">🇨🇮</span> <span class="team-name">Costa de Marfil</span>
-        </label>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoE" value="Ecuador"> 
-            <span class="flag">🇪🇨</span> <span class="team-name">Ecuador</span>
-        </label>
-    </div>
+        let usuarioGlobal = "";
 
-    <div class="group-card">
-        <h3 class="group-title">Grupo F</h3>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoF" value="Paises_Bajos"> 
-            <span class="flag">🇳🇱</span> <span class="team-name">Países Bajos</span>
-        </label>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoF" value="Japon"> 
-            <span class="flag">🇯🇵</span> <span class="team-name">Japón</span>
-        </label>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoF" value="Suecia"> 
-            <span class="flag">🇸🇪</span> <span class="team-name">Suecia</span>
-        </label>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoF" value="Tunez"> 
-            <span class="flag">🇹🇳</span> <span class="team-name">Túnez</span>
-        </label>
-    </div>
+        // --- 1. LÓGICA DE REGISTRO ---
+        document.getElementById('btn-register').addEventListener('click', async () => {
+            const nombre = document.getElementById('user-name').value.trim();
+            const pin = document.getElementById('user-pin').value.trim();
 
-    <div class="group-card">
-        <h3 class="group-title">Grupo G</h3>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoG" value="Belgica"> 
-            <span class="flag">🇧🇪</span> <span class="team-name">Bélgica</span>
-        </label>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoG" value="Egipto"> 
-            <span class="flag">🇪🇬</span> <span class="team-name">Egipto</span>
-        </label>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoG" value="Iran"> 
-            <span class="flag">🇮🇷</span> <span class="team-name">Irán</span>
-        </label>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoG" value="Nueva_Zelanda"> 
-            <span class="flag">🇳🇿</span> <span class="team-name">Nueva Zelanda</span>
-        </label>
-    </div>
+            if (!nombre || !pin) return alert("Llena los campos para registrarte, we.");
 
-    <div class="group-card">
-        <h3 class="group-title">Grupo H</h3>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoH" value="Espana"> 
-            <span class="flag">🇪🇸</span> <span class="team-name">España</span>
-        </label>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoH" value="Cabo_Verde"> 
-            <span class="flag">🇨🇻</span> <span class="team-name">Cabo Verde</span>
-        </label>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoH" value="Arabia_Saudita"> 
-            <span class="flag">🇸🇦</span> <span class="team-name">Arabia S.</span>
-        </label>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoH" value="Uruguay"> 
-            <span class="flag">🇺🇾</span> <span class="team-name">Uruguay</span>
-        </label>
-    </div>
+            // Checamos si el usuario ya existe
+            const q = query(collection(db, "usuarios"), where("nombre", "==", nombre));
+            const snapshot = await getDocs(q);
 
-    <div class="group-card">
-        <h3 class="group-title">Grupo I</h3>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoI" value="Francia"> 
-            <span class="flag">🇫🇷</span> <span class="team-name">Francia</span>
-        </label>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoI" value="Senegal"> 
-            <span class="flag">🇸🇳</span> <span class="team-name">Senegal</span>
-        </label>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoI" value="Irak"> 
-            <span class="flag">🇮🇶</span> <span class="team-name">Irak</span>
-        </label>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoI" value="Noruega"> 
-            <span class="flag">🇳🇴</span> <span class="team-name">Noruega</span>
-        </label>
-    </div>
+            if (!snapshot.empty) {
+                alert("Ese usuario ya existe. Si eres tú, dale a Entrar.");
+                return;
+            }
 
-    <div class="group-card">
-        <h3 class="group-title">Grupo J</h3>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoJ" value="Argentina"> 
-            <span class="flag">🇦🇷</span> <span class="team-name">Argentina</span>
-        </label>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoJ" value="Argelia"> 
-            <span class="flag">🇩🇿</span> <span class="team-name">Argelia</span>
-        </label>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoJ" value="Austria"> 
-            <span class="flag">🇦🇹</span> <span class="team-name">Austria</span>
-        </label>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoJ" value="Jordania"> 
-            <span class="flag">🇯🇴</span> <span class="team-name">Jordania</span>
-        </label>
-    </div>
+            try {
+                // Lo creamos con 0 puntos
+                await addDoc(collection(db, "usuarios"), {
+                    nombre: nombre,
+                    pin: pin,
+                    puntos_totales: 0
+                });
+                alert("¡Usuario creado al cien! Ya puedes darle a Entrar.");
+            } catch (error) {
+                console.error("Error al registrar:", error);
+                alert("Hubo un error al conectar, checa tu internet.");
+            }
+        });
 
-    <div class="group-card">
-        <h3 class="group-title">Grupo K</h3>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoK" value="Portugal"> 
-            <span class="flag">🇵🇹</span> <span class="team-name">Portugal</span>
-        </label>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoK" value="RD_Congo"> 
-            <span class="flag">🇨🇩</span> <span class="team-name">RD Congo</span>
-        </label>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoK" value="Uzbekistan"> 
-            <span class="flag">🇺🇿</span> <span class="team-name">Uzbekistán</span>
-        </label>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoK" value="Colombia"> 
-            <span class="flag">🇨🇴</span> <span class="team-name">Colombia</span>
-        </label>
-    </div>
+        // --- 2. LÓGICA DE LOGIN ---
+        document.getElementById('btn-login').addEventListener('click', async () => {
+            const nombre = document.getElementById('user-name').value.trim();
+            const pin = document.getElementById('user-pin').value.trim();
 
-    <div class="group-card">
-        <h3 class="group-title">Grupo L</h3>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoL" value="Inglaterra"> 
-            <span class="flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span> <span class="team-name">Inglaterra</span>
-        </label>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoL" value="Croacia"> 
-            <span class="flag">🇭🇷</span> <span class="team-name">Croacia</span>
-        </label>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoL" value="Ghana"> 
-            <span class="flag">🇬🇭</span> <span class="team-name">Ghana</span>
-        </label>
-        <label class="team-option">
-            <input type="checkbox" class="chk-grupoL" value="Panama"> 
-            <span class="flag">🇵🇦</span> <span class="team-name">Panamá</span>
-        </label>
-    </div>
-</div>
-</div>
+            if (!nombre || !pin) return alert("Pon tu nombre y tu PIN, we.");
 
-<div class="actions">
-    <button type="button" class="btn-descargar" onclick="descargarCaptura()">Generar Captura</button>
-</div>
+            // Consultamos la tabla "usuarios" para ver si el PIN coincide
+            const q = query(collection(db, "usuarios"), where("nombre", "==", nombre), where("pin", "==", pin));
+            const querySnapshot = await getDocs(q);
 
-<script>
-    // 1. Limitar a máximo 2 checkboxes seleccionados por grupo
-    const grupos = ['grupoA', 'grupoB', 'grupoC', 'grupoD', 'grupoE', 'grupoF', 'grupoG', 'grupoH', 'grupoI', 'grupoJ', 'grupoK', 'grupoL']; // Agrega las letras si metes más grupos
+            if (!querySnapshot.empty) {
+                // Login exitoso
+                usuarioGlobal = nombre;
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('app-screen').style.display = 'flex';
+                document.getElementById('bienvenida-msg').innerText = `¡Qué onda, ${nombre}! Mete tus pronósticos:`;
+                
+                // Cargamos los partidos ahora que ya entró
+                cargarPartidosActivos();
+            } else {
+                alert("Usuario o PIN incorrecto. Revisa bien o regístrate si eres nuevo.");
+            }
+        });
 
-    grupos.forEach(grupo => {
-        const checkboxes = document.querySelectorAll(`.chk-${grupo}`);
-        checkboxes.forEach(chk => {
-            chk.addEventListener('change', function() {
-                const checkedCount = document.querySelectorAll(`.chk-${grupo}:checked`).length;
-                if (checkedCount > 2) {
-                    this.checked = false;
-                    alert('Solo pasan 2 por grupo, we.');
+        // --- 3. RENDERIZADO DINÁMICO DE PARTIDOS ---
+        const contenedor = document.getElementById('contenedor-partidos');
+
+        async function cargarPartidosActivos() {
+            try {
+                // Traemos los partidos donde apuestas_abiertas es true
+                const q = query(collection(db, "partidos"), where("apuestas_abiertas", "==", true));
+                const querySnapshot = await getDocs(q);
+                
+                contenedor.innerHTML = "";
+
+                if (querySnapshot.empty) {
+                    contenedor.innerHTML = "<h3>No hay partidos abiertos para apostar ahorita.</h3>";
+                    return;
                 }
-            });
-        });
-    });
 
-    // 2. Función para tomar screenshot del div principal y descargar
-    function descargarCaptura() {
-        const nombre = document.getElementById('nombreParticipante').value;
-        const campeon = document.getElementById('campeon').value;
-        
-        if(!nombre) {
-            alert("¡Pon tu nombre primero para saber de quién es la quiniela!");
-            return;
+                querySnapshot.forEach((doc) => {
+                    const partido = doc.data();
+                    const idPartido = doc.id; 
+
+                    const tarjetaHTML = `
+                        <div class="match-card" data-partido-id="${idPartido}">
+                            <h3 class="match-title">${partido.fase}: ${partido.equipo_local} vs ${partido.equipo_visita}</h3>
+                            
+                            <div class="marcador-inputs">
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <span>${partido.bandera_local}</span> 
+                                    <input type="number" class="gol-input gol-local" min="0" placeholder="0">
+                                </label>
+                                <span> - </span>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="number" class="gol-input gol-visita" min="0" placeholder="0">
+                                    <span>${partido.bandera_visita}</span>
+                                </label>
+                            </div>
+
+                            <div class="penales-container">
+                                <p style="margin: 0; font-size: 12px; color: #00ffff; text-transform: uppercase;">¿Quién pasa en penales?</p>
+                                <div>
+                                    <label><input type="radio" class="radio-penales" name="penales_${idPartido}" value="local"> ${partido.bandera_local}</label>
+                                    <label style="margin-left: 15px;"><input type="radio" class="radio-penales" name="penales_${idPartido}" value="visita"> ${partido.bandera_visita}</label>
+                                </div>
+                            </div>
+
+                            <button class="btn-principal btn-guardar" style="width: 100%; margin-top: 15px;">Guardar Pronóstico</button>
+                        </div>
+                    `;
+                    contenedor.innerHTML += tarjetaHTML;
+                });
+            } catch (error) {
+                console.error("Error cargando partidos:", error);
+                contenedor.innerHTML = "<h3>Error al conectar con la base de datos.</h3>";
+            }
         }
-        if(!campeon) {
-            alert("¡No olvides seleccionar al campeón del mundo!");
-            return;
-        }
 
-        const contenedor = document.getElementById('quiniela-container');
-        
-        // Usamos html2canvas
-        html2canvas(contenedor, {
-            backgroundColor: "#1a0b2e", // Fondo para que no salga transparente
-            scale: 2 // Para que tenga buena calidad la imagen
-        }).then(canvas => {
-            // Convertir el canvas a un Data URL
-            const imgData = canvas.toDataURL("image/png");
-            
-            // Crear un enlace temporal para forzar la descarga
-            const enlace = document.createElement('a');
-            enlace.href = imgData;
-            // El archivo llevará el nombre del participante
-            enlace.download = `Quiniela_${nombre.replace(/\s+/g, '_')}.png`; 
-            
-            document.body.appendChild(enlace);
-            enlace.click();
-            document.body.removeChild(enlace);
+        // --- 4. LÓGICA DE PENALES Y GUARDADO (Delegación de eventos) ---
+        // Escuchamos cuando el usuario teclea los goles para mostrar u ocultar los penales
+        contenedor.addEventListener('input', (e) => {
+            if (e.target.classList.contains('gol-local') || e.target.classList.contains('gol-visita')) {
+                const tarjeta = e.target.closest('.match-card');
+                const golesL = tarjeta.querySelector('.gol-local').value;
+                const golesV = tarjeta.querySelector('.gol-visita').value;
+                const divPenales = tarjeta.querySelector('.penales-container');
+                const radios = tarjeta.querySelectorAll('.radio-penales');
+
+                if (golesL !== "" && golesV !== "" && golesL === golesV) {
+                    divPenales.classList.add('visible');
+                } else {
+                    divPenales.classList.remove('visible');
+                    radios.forEach(r => r.checked = false); // Limpiamos la selección si se arrepienten del empate
+                }
+            }
         });
-    }
-</script>
 
+        // Escuchamos cuando le dan click al botón de guardar
+        contenedor.addEventListener('click', async (e) => {
+            if (e.target.classList.contains('btn-guardar')) {
+                const boton = e.target;
+                const tarjeta = boton.closest('.match-card');
+                const idPartido = tarjeta.getAttribute('data-partido-id');
+                const golesL = parseInt(tarjeta.querySelector('.gol-local').value);
+                const golesV = parseInt(tarjeta.querySelector('.gol-visita').value);
+                const radios = tarjeta.querySelectorAll('.radio-penales');
+
+                if (isNaN(golesL) || isNaN(golesV)) {
+                    alert("¡Mete un marcador válido, we!");
+                    return;
+                }
+
+                let avanzaPenales = null;
+                if (golesL === golesV) {
+                    const seleccionado = Array.from(radios).find(r => r.checked);
+                    if (!seleccionado) {
+                        alert("Hubo empate, elige quién pasa en penales.");
+                        return;
+                    }
+                    avanzaPenales = seleccionado.value;
+                }
+
+                try {
+                    // Guardamos el pronóstico en Firebase
+                    await addDoc(collection(db, "pronosticos"), {
+                        id_usuario: usuarioGlobal,
+                        id_partido: idPartido,
+                        goles_local: golesL,
+                        goles_visita: golesV,
+                        avanza_en_penales: avanzaPenales,
+                        fecha_registro: new Date()
+                    });
+                    
+                    boton.style.backgroundColor = "#28a745";
+                    boton.style.color = "#fff";
+                    boton.innerText = "¡GUARDADO!";
+                    setTimeout(() => {
+                        boton.style.backgroundColor = "#00ffff";
+                        boton.style.color = "#050d1a";
+                        boton.innerText = "Guardar Pronóstico";
+                    }, 3000);
+
+                } catch (error) {
+                    console.error("Error al guardar:", error);
+                    alert("No se pudo guardar, revisa tu conexión.");
+                }
+            }
+        });
+    </script>
 </body>
 </html>
