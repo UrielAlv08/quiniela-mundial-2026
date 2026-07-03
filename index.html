@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiniela Fase Final 2026</title>
+    <title>Quiniela Octavos 2026</title>
+    <!-- Librería para tomar la captura de pantalla -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        /* ================= CSS ================= */
         body {
             background-color: #050d1a;
             color: #00ffff;
@@ -17,6 +18,15 @@
             align-items: center;
         }
 
+        /* Contenedor principal que se va a capturar en la foto */
+        #area-captura {
+            background-color: #050d1a;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 900px;
+            width: 100%;
+        }
+
         h1 {
             text-align: center;
             text-transform: uppercase;
@@ -25,86 +35,74 @@
             text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
         }
 
-        /* Pantallas */
-        #login-screen, #app-screen {
-            width: 100%;
-            max-width: 1200px;
+        /* Header con el Nombre */
+        .jugador-header {
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
+            margin-bottom: 20px;
+            gap: 15px;
         }
 
-        /* --- Estilos del Login y Registro --- */
-        .login-box {
+        .jugador-header input {
             background-color: #020c26;
-            border: 1px solid #d4af37;
-            border-radius: 10px;
-            padding: 30px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            width: 300px;
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+            border: 2px solid #d4af37;
+            color: #fff;
+            padding: 10px;
+            font-size: 18px;
+            border-radius: 5px;
+            text-align: center;
+            outline: none;
+            width: 250px;
+        }
+
+        /* Leyenda de Puntos */
+        .leyenda-puntos {
+            background-color: #020c26;
+            border: 1px solid #00ffff;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .leyenda-puntos h3 {
+            margin-top: 0;
+            color: #d4af37;
             text-align: center;
         }
 
-        .login-input {
-            padding: 10px;
-            background-color: #050d1a;
-            border: 1px solid #00ffff;
-            color: #fff;
-            border-radius: 5px;
-            outline: none;
-            font-size: 16px;
+        .leyenda-puntos ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
         }
 
-        .btn-principal {
-            background-color: #00ffff;
-            color: #050d1a;
-            border: none;
-            padding: 12px;
+        .leyenda-puntos li {
+            margin-bottom: 8px;
+        }
+
+        .leyenda-puntos span {
             font-weight: bold;
-            border-radius: 5px;
-            cursor: pointer;
-            text-transform: uppercase;
-            transition: 0.2s;
+            color: #00ffff;
         }
 
-        .btn-principal:hover {
-            background-color: #d4af37;
-            box-shadow: 0 0 10px #d4af37;
-        }
-        
-        .btn-registro {
-            background-color: #28a745;
-            color: white;
-        }
-        
-        .btn-registro:hover {
-            background-color: #218838;
-            box-shadow: 0 0 10px #28a745;
-        }
-
-        /* --- Estilos de los Partidos --- */
+        /* Grid de Partidos */
         .bracket-container {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 20px;
-            width: 100%;
         }
 
         .match-card {
             background-color: #020c26;
-            border: 1px solid #00ffff;
+            border: 1px solid #d4af37;
             border-radius: 10px;
             padding: 15px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-width: 280px;
-            box-shadow: 0 0 10px rgba(0, 255, 255, 0.1);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.05);
         }
 
         .match-title {
@@ -113,14 +111,25 @@
             margin-bottom: 15px;
             color: #d4af37;
             text-transform: uppercase;
+            text-align: center;
         }
 
         .marcador-inputs {
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 15px;
             font-size: 18px;
             font-weight: bold;
+            width: 100%;
+        }
+
+        .equipo-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            flex: 1;
         }
 
         .gol-input {
@@ -135,11 +144,7 @@
             outline: none;
         }
 
-        .gol-input:focus {
-            box-shadow: 0 0 8px #00ffff;
-        }
-
-        /* Contenedor de Penales (Magia invisible) */
+        /* Contenedor de Penales */
         .penales-container {
             display: none; 
             margin-top: 15px;
@@ -148,7 +153,7 @@
             border-radius: 8px;
             width: 100%;
             text-align: center;
-            animation: aparecer 0.3s ease-in-out;
+            box-sizing: border-box;
         }
 
         .penales-container.visible {
@@ -157,237 +162,310 @@
             gap: 10px;
         }
 
-        @keyframes aparecer {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Botón de Captura */
+        .btn-capturar {
+            margin-top: 30px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: transform 0.2s;
+            box-shadow: 0 0 15px rgba(40, 167, 69, 0.4);
+        }
+
+        .btn-capturar:hover {
+            transform: scale(1.05);
+            background-color: #218838;
+        }
+        
+        .marca-agua {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: rgba(0, 255, 255, 0.3);
+        }
+
+        /* Quitar las flechas blancas en Chrome, Safari, Edge y Opera */
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Quitar las flechas blancas en Firefox */
+        input[type="number"] {
+            -moz-appearance: textfield;
         }
     </style>
 </head>
 <body>
 
-    <h1>🏆 Quiniela 2026</h1>
+    <!-- BÓTON FUERA DEL ÁREA DE CAPTURA -->
 
-    <div id="login-screen">
-        <div class="login-box">
-            <h3 style="margin: 0; color: #d4af37;">Acceso a la Quiniela</h3>
-            <input type="text" id="user-name" class="login-input" placeholder="Tu Usuario (Ej. ElBicho7)">
-            <input type="password" id="user-pin" class="login-input" placeholder="Tu PIN (4 dígitos)" maxlength="4">
-            
-            <div style="display: flex; gap: 10px; margin-top: 10px;">
-                <button id="btn-login" class="btn-principal" style="flex: 1;">Entrar</button>
-                <button id="btn-register" class="btn-principal btn-registro" style="flex: 1;">Registrar</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="app-screen" style="display: none;">
-        <h2 id="bienvenida-msg" style="color: #fff; margin-bottom: 20px;"></h2>
+    <!-- ÁREA QUE SE VA A CONVERTIR EN IMAGEN -->
+    <div id="area-captura">
+        <h1>🏆 Quiniela Octavos 2026</h1>
         
-        <div id="contenedor-partidos" class="bracket-container">
-            <h3 style="text-align: center;">Cargando partidos disponibles... ⏳</h3>
+        <div class="jugador-header">
+            <strong>Participante:</strong>
+            <input type="text" id="nombre-jugador" placeholder="Escribe tu nombre aquí...">
         </div>
+
+        <div class="leyenda-puntos">
+            <h3>Reglas de Puntuación</h3>
+            <ul>
+                <li><span>5 Puntos:</span> Acertas marcador de empate exacto y acertas quién pasa en penales.</li>
+                <li><span>3 Puntos:</span> Acertas el marcador exacto en los 90 minutos.</li>
+                <li><span>1 Punto:</span> Atinas quién gana o si hay empate, pero fallas el marcador. O tu equipo pasa en penales tras fallar los goles.</li>
+            </ul>
+        </div>
+
+        <div class="bracket-container" id="grid-partidos">
+            
+            <!-- PARTIDO 1 -->
+            <div class="match-card">
+                <h3 class="match-title">🇨🇦 Canadá vs Marruecos 🇲🇦</h3>
+                <div class="marcador-inputs">
+                    <label class="equipo-label">
+                        CAN
+                        <input type="number" class="gol-input gol-local" min="0">
+                    </label>
+                    <span>-</span>
+                    <label class="equipo-label">
+                        MAR
+                        <input type="number" class="gol-input gol-visita" min="0">
+                    </label>
+                </div>
+                <div class="penales-container">
+                    <p style="margin: 0; font-size: 12px;">¿Quién pasa en penales?</p>
+                    <div>
+                        <label><input type="radio" name="penales_1" value="local"> 🇨🇦 CAN</label>
+                        <label style="margin-left: 10px;"><input type="radio" name="penales_1" value="visita"> 🇲🇦 MAR</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PARTIDO 2 -->
+            <div class="match-card">
+                <h3 class="match-title">🇵🇾 Paraguay vs Francia 🇫🇷</h3>
+                <div class="marcador-inputs">
+                    <label class="equipo-label">
+                        PAR
+                        <input type="number" class="gol-input gol-local" min="0">
+                    </label>
+                    <span>-</span>
+                    <label class="equipo-label">
+                        FRA
+                        <input type="number" class="gol-input gol-visita" min="0">
+                    </label>
+                </div>
+                <div class="penales-container">
+                    <p style="margin: 0; font-size: 12px;">¿Quién pasa en penales?</p>
+                    <div>
+                        <label><input type="radio" name="penales_2" value="local"> 🇵🇾 PAR</label>
+                        <label style="margin-left: 10px;"><input type="radio" name="penales_2" value="visita"> 🇫🇷 FRA</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PARTIDO 3 -->
+            <div class="match-card">
+                <h3 class="match-title">🇧🇷 Brasil vs Noruega 🇳🇴</h3>
+                <div class="marcador-inputs">
+                    <label class="equipo-label">
+                        BRA
+                        <input type="number" class="gol-input gol-local" min="0">
+                    </label>
+                    <span>-</span>
+                    <label class="equipo-label">
+                        NOR
+                        <input type="number" class="gol-input gol-visita" min="0">
+                    </label>
+                </div>
+                <div class="penales-container">
+                    <p style="margin: 0; font-size: 12px;">¿Quién pasa en penales?</p>
+                    <div>
+                        <label><input type="radio" name="penales_3" value="local"> 🇧🇷 BRA</label>
+                        <label style="margin-left: 10px;"><input type="radio" name="penales_3" value="visita"> 🇳🇴 NOR</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PARTIDO 4 -->
+            <div class="match-card">
+                <h3 class="match-title">🇲🇽 México vs Inglaterra 🏴󠁧󠁢󠁥󠁮󠁧󠁿</h3>
+                <div class="marcador-inputs">
+                    <label class="equipo-label">
+                        MEX
+                        <input type="number" class="gol-input gol-local" min="0">
+                    </label>
+                    <span>-</span>
+                    <label class="equipo-label">
+                        ING
+                        <input type="number" class="gol-input gol-visita" min="0">
+                    </label>
+                </div>
+                <div class="penales-container">
+                    <p style="margin: 0; font-size: 12px;">¿Quién pasa en penales?</p>
+                    <div>
+                        <label><input type="radio" name="penales_4" value="local"> 🇲🇽 MEX</label>
+                        <label style="margin-left: 10px;"><input type="radio" name="penales_4" value="visita"> 🏴󠁧󠁢󠁥󠁮󠁧󠁿 ING</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PARTIDO 5 -->
+            <div class="match-card">
+                <h3 class="match-title">🇵🇹 Portugal vs España 🇪🇸</h3>
+                <div class="marcador-inputs">
+                    <label class="equipo-label">
+                        POR
+                        <input type="number" class="gol-input gol-local" min="0">
+                    </label>
+                    <span>-</span>
+                    <label class="equipo-label">
+                        ESP
+                        <input type="number" class="gol-input gol-visita" min="0">
+                    </label>
+                </div>
+                <div class="penales-container">
+                    <p style="margin: 0; font-size: 12px;">¿Quién pasa en penales?</p>
+                    <div>
+                        <label><input type="radio" name="penales_5" value="local"> 🇵🇹 POR</label>
+                        <label style="margin-left: 10px;"><input type="radio" name="penales_5" value="visita"> 🇪🇸 ESP</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PARTIDO 6 -->
+            <div class="match-card">
+                <h3 class="match-title">🇺🇸 Estados Unidos vs Bélgica 🇧🇪</h3>
+                <div class="marcador-inputs">
+                    <label class="equipo-label">
+                        USA
+                        <input type="number" class="gol-input gol-local" min="0">
+                    </label>
+                    <span>-</span>
+                    <label class="equipo-label">
+                        BEL
+                        <input type="number" class="gol-input gol-visita" min="0">
+                    </label>
+                </div>
+                <div class="penales-container">
+                    <p style="margin: 0; font-size: 12px;">¿Quién pasa en penales?</p>
+                    <div>
+                        <label><input type="radio" name="penales_6" value="local"> 🇺🇸 USA</label>
+                        <label style="margin-left: 10px;"><input type="radio" name="penales_6" value="visita"> 🇧🇪 BEL</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- PARTIDO 7 (Por Definir) -->
+            <div class="match-card">
+                <h3 class="match-title">🇨🇭 Suiza vs Ghana 🇬🇭</h3>
+                <div class="marcador-inputs">
+                    <label class="equipo-label">
+                        SUI
+                        <input type="number" class="gol-input gol-local" min="0">
+                    </label>
+                    <span>-</span>
+                    <label class="equipo-label">
+                        GHA
+                        <input type="number" class="gol-input gol-visita" min="0">
+                    </label>
+                </div>
+                <div class="penales-container">
+                    <p style="margin: 0; font-size: 12px;">¿Quién pasa en penales?</p>
+                    <div>
+                        <label><input type="radio" name="penales_7" value="local"> 🇨🇭 SUI</label>
+                        <label style="margin-left: 10px;"><input type="radio" name="penales_7" value="visita"> 🇬🇭 GHA</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PARTIDO 8 (Por Definir) -->
+            <div class="match-card">
+                <h3 class="match-title">🇪🇬 Egipto vs Argentina 🇦🇷</h3>
+                <div class="marcador-inputs">
+                    <label class="equipo-label">
+                        EGY
+                        <input type="number" class="gol-input gol-local" min="0">
+                    </label>
+                    <span>-</span>
+                    <label class="equipo-label">
+                        ARG
+                        <input type="number" class="gol-input gol-visita" min="0">
+                    </label>
+                </div>
+                <div class="penales-container">
+                    <p style="margin: 0; font-size: 12px;">¿Quién pasa en penales?</p>
+                    <div>
+                        <label><input type="radio" name="penales_8" value="local"> 🇪🇬 EGY</label>
+                        <label style="margin-left: 10px;"><input type="radio" name="penales_8" value="visita"> 🇦🇷 ARG</label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+        <div class="marca-agua">Quiniela Oficial - Octavos de Final 2026</div>
+        <button class="btn-capturar" style="align-items: center;" onclick="tomarCaptura()">Guardar Captura</button>
+
     </div>
 
-    <script type="module">
-        // Importamos Firebase desde los CDN para el navegador
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, query, where, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    <!-- SCRIPT DE LÓGICA Y CAPTURA -->
+    <script>
+        // 1. LÓGICA DE PENALES
+        const contenedor = document.getElementById('grid-partidos');
 
-        // Tus credenciales reales de Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyBwlXIhv5y-tEzvJ3kECF_AAPEyctZk4ak",
-            authDomain: "quiniela-2026-f2660.firebaseapp.com",
-            projectId: "quiniela-2026-f2660",
-            storageBucket: "quiniela-2026-f2660.firebasestorage.app",
-            messagingSenderId: "231292737636",
-            appId: "1:231292737636:web:073d04102f7a09a6c42771"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        let usuarioGlobal = "";
-
-        // --- 1. LÓGICA DE REGISTRO ---
-        document.getElementById('btn-register').addEventListener('click', async () => {
-            const nombre = document.getElementById('user-name').value.trim();
-            const pin = document.getElementById('user-pin').value.trim();
-
-            if (!nombre || !pin) return alert("Llena los campos para registrarte, we.");
-
-            // Checamos si el usuario ya existe
-            const q = query(collection(db, "usuarios"), where("nombre", "==", nombre));
-            const snapshot = await getDocs(q);
-
-            if (!snapshot.empty) {
-                alert("Ese usuario ya existe. Si eres tú, dale a Entrar.");
-                return;
-            }
-
-            try {
-                // Lo creamos con 0 puntos
-                await addDoc(collection(db, "usuarios"), {
-                    nombre: nombre,
-                    pin: pin,
-                    puntos_totales: 0
-                });
-                alert("¡Usuario creado al cien! Ya puedes darle a Entrar.");
-            } catch (error) {
-                console.error("Error al registrar:", error);
-                alert("Hubo un error al conectar, checa tu internet.");
-            }
-        });
-
-        // --- 2. LÓGICA DE LOGIN ---
-        document.getElementById('btn-login').addEventListener('click', async () => {
-            const nombre = document.getElementById('user-name').value.trim();
-            const pin = document.getElementById('user-pin').value.trim();
-
-            if (!nombre || !pin) return alert("Pon tu nombre y tu PIN, we.");
-
-            // Consultamos la tabla "usuarios" para ver si el PIN coincide
-            const q = query(collection(db, "usuarios"), where("nombre", "==", nombre), where("pin", "==", pin));
-            const querySnapshot = await getDocs(q);
-
-            if (!querySnapshot.empty) {
-                // Login exitoso
-                usuarioGlobal = nombre;
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('app-screen').style.display = 'flex';
-                document.getElementById('bienvenida-msg').innerText = `¡Qué onda, ${nombre}! Mete tus pronósticos:`;
-                
-                // Cargamos los partidos ahora que ya entró
-                cargarPartidosActivos();
-            } else {
-                alert("Usuario o PIN incorrecto. Revisa bien o regístrate si eres nuevo.");
-            }
-        });
-
-        // --- 3. RENDERIZADO DINÁMICO DE PARTIDOS ---
-        const contenedor = document.getElementById('contenedor-partidos');
-
-        async function cargarPartidosActivos() {
-            try {
-                // Traemos los partidos donde apuestas_abiertas es true
-                const q = query(collection(db, "partidos"), where("apuestas_abiertas", "==", true));
-                const querySnapshot = await getDocs(q);
-                
-                contenedor.innerHTML = "";
-
-                if (querySnapshot.empty) {
-                    contenedor.innerHTML = "<h3>No hay partidos abiertos para apostar ahorita.</h3>";
-                    return;
-                }
-
-                querySnapshot.forEach((doc) => {
-                    const partido = doc.data();
-                    const idPartido = doc.id; 
-
-                    const tarjetaHTML = `
-                        <div class="match-card" data-partido-id="${idPartido}">
-                            <h3 class="match-title">${partido.fase}: ${partido.equipo_local} vs ${partido.equipo_visita}</h3>
-                            
-                            <div class="marcador-inputs">
-                                <label style="display: flex; align-items: center; gap: 8px;">
-                                    <span>${partido.bandera_local}</span> 
-                                    <input type="number" class="gol-input gol-local" min="0" placeholder="0">
-                                </label>
-                                <span> - </span>
-                                <label style="display: flex; align-items: center; gap: 8px;">
-                                    <input type="number" class="gol-input gol-visita" min="0" placeholder="0">
-                                    <span>${partido.bandera_visita}</span>
-                                </label>
-                            </div>
-
-                            <div class="penales-container">
-                                <p style="margin: 0; font-size: 12px; color: #00ffff; text-transform: uppercase;">¿Quién pasa en penales?</p>
-                                <div>
-                                    <label><input type="radio" class="radio-penales" name="penales_${idPartido}" value="local"> ${partido.bandera_local}</label>
-                                    <label style="margin-left: 15px;"><input type="radio" class="radio-penales" name="penales_${idPartido}" value="visita"> ${partido.bandera_visita}</label>
-                                </div>
-                            </div>
-
-                            <button class="btn-principal btn-guardar" style="width: 100%; margin-top: 15px;">Guardar Pronóstico</button>
-                        </div>
-                    `;
-                    contenedor.innerHTML += tarjetaHTML;
-                });
-            } catch (error) {
-                console.error("Error cargando partidos:", error);
-                contenedor.innerHTML = "<h3>Error al conectar con la base de datos.</h3>";
-            }
-        }
-
-        // --- 4. LÓGICA DE PENALES Y GUARDADO (Delegación de eventos) ---
-        // Escuchamos cuando el usuario teclea los goles para mostrar u ocultar los penales
         contenedor.addEventListener('input', (e) => {
             if (e.target.classList.contains('gol-local') || e.target.classList.contains('gol-visita')) {
                 const tarjeta = e.target.closest('.match-card');
                 const golesL = tarjeta.querySelector('.gol-local').value;
                 const golesV = tarjeta.querySelector('.gol-visita').value;
                 const divPenales = tarjeta.querySelector('.penales-container');
-                const radios = tarjeta.querySelectorAll('.radio-penales');
+                const radios = tarjeta.querySelectorAll('input[type="radio"]');
 
                 if (golesL !== "" && golesV !== "" && golesL === golesV) {
                     divPenales.classList.add('visible');
                 } else {
                     divPenales.classList.remove('visible');
-                    radios.forEach(r => r.checked = false); // Limpiamos la selección si se arrepienten del empate
+                    radios.forEach(r => r.checked = false); 
                 }
             }
         });
 
-        // Escuchamos cuando le dan click al botón de guardar
-        contenedor.addEventListener('click', async (e) => {
-            if (e.target.classList.contains('btn-guardar')) {
-                const boton = e.target;
-                const tarjeta = boton.closest('.match-card');
-                const idPartido = tarjeta.getAttribute('data-partido-id');
-                const golesL = parseInt(tarjeta.querySelector('.gol-local').value);
-                const golesV = parseInt(tarjeta.querySelector('.gol-visita').value);
-                const radios = tarjeta.querySelectorAll('.radio-penales');
-
-                if (isNaN(golesL) || isNaN(golesV)) {
-                    alert("¡Mete un marcador válido, we!");
-                    return;
-                }
-
-                let avanzaPenales = null;
-                if (golesL === golesV) {
-                    const seleccionado = Array.from(radios).find(r => r.checked);
-                    if (!seleccionado) {
-                        alert("Hubo empate, elige quién pasa en penales.");
-                        return;
-                    }
-                    avanzaPenales = seleccionado.value;
-                }
-
-                try {
-                    // Guardamos el pronóstico en Firebase
-                    await addDoc(collection(db, "pronosticos"), {
-                        id_usuario: usuarioGlobal,
-                        id_partido: idPartido,
-                        goles_local: golesL,
-                        goles_visita: golesV,
-                        avanza_en_penales: avanzaPenales,
-                        fecha_registro: new Date()
-                    });
-                    
-                    boton.style.backgroundColor = "#28a745";
-                    boton.style.color = "#fff";
-                    boton.innerText = "¡GUARDADO!";
-                    setTimeout(() => {
-                        boton.style.backgroundColor = "#00ffff";
-                        boton.style.color = "#050d1a";
-                        boton.innerText = "Guardar Pronóstico";
-                    }, 3000);
-
-                } catch (error) {
-                    console.error("Error al guardar:", error);
-                    alert("No se pudo guardar, revisa tu conexión.");
-                }
+        // 2. FUNCIÓN PARA TOMAR LA CAPTURA Y DESCARGAR
+        function tomarCaptura() {
+            const nombre = document.getElementById('nombre-jugador').value.trim();
+            if(!nombre) {
+                alert("¡Eh, no seas wey! Pon tu nombre arriba antes de tomar la foto para saber de quién es la quiniela.");
+                return;
             }
-        });
+
+            // Seleccionamos el div completo que queremos convertir en imagen
+            const elemento = document.getElementById('area-captura');
+
+            // html2canvas procesa el div y devuelve un elemento canvas
+            html2canvas(elemento, {
+                backgroundColor: "#050d1a", // Mantiene el fondo oscuro en la imagen
+                scale: 2 // Mejora la resolución de la captura
+            }).then(canvas => {
+                // Convertimos el canvas a imagen PNG
+                const imgData = canvas.toDataURL("image/png");
+                
+                // Creamos un link invisible para forzar la descarga
+                const link = document.createElement('a');
+                link.download = `Quiniela_${nombre.replace(/\s+/g, '_')}_Octavos.png`;
+                link.href = imgData;
+                link.click();
+            });
+        }
     </script>
 </body>
 </html>
